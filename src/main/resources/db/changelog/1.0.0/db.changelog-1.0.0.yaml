@@ -1,0 +1,12 @@
+databaseChangeLog:
+
+  - logicalFilePath: "classpath:/db/changelog/1.0.0/db.changelog-1.0.0.yaml"
+
+  - include: { relativeToChangelogFile: true, file: 0.0.1__create_instruments_table.yaml }
+  - include: { relativeToChangelogFile: true, file: 0.0.2__create_orders_table.yaml }
+
+  - changeSet:
+      id: tag-1.0.0
+      author: Guliaev Vitaliy
+      changes:
+        - tagDatabase: { tag: 1.0.0 }

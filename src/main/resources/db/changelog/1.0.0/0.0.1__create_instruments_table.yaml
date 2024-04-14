@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - logicalFilePath: "classpath:/db/changelog/1.0.0/0.0.1__create_instruments_table.yaml"
+
+  - changeSet:
+      id: 1.0.0-001
+      comment: create instruments table
+      context: ddl
+      author: Guliaev Vitaliy
+      changes:
+        - createTable:
+            schemaName: "public"
+            tableName: "instruments"
+            columns:
+              - column:
+                  name: "order_uuid"
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: "type"
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "series_number"
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    primaryKey: true
+              - column:
+                  name: "price_cop"
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "commercial_name"
+                  type: VARCHAR(127)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: "delivery_state"
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: "available_to_order"
+                  type: BOOLEAN

@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: yellow-guitar-bend
+  level:
+    org:
+      springframework:
+        web:
+          servlet:
+            DispatcherServlet: INFO
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  jackson.serialization:
+    WRITE_DATES_AS_TIMESTAMPS: false
+    indent_output: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 25
+    password: "postgres"
+    username: "postgres"
+    url: "jdbc:postgresql://localhost:5433/postgres"
+  liquibase:
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    enabled: true

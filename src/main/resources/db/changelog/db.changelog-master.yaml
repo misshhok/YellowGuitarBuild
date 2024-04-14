@@ -1,0 +1,11 @@
+databaseChangeLog:
+
+  - logicalFilePath: "classpath:/db/changelog/db.changelog-master.yaml"
+
+  - property:
+      name: now
+      value: now()
+
+  # ============= RELEASE 1.0.0 ======================
+
+  - include: { relativeToChangelogFile: true, file: 1.0.0/db.changelog-1.0.0.yaml }
