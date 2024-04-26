@@ -56,8 +56,9 @@ public class InstrumentEntity {
       commercialName, DeliveryState.NEED_CHECK, true);
   }
 
-  public void ordered() {
+  public void ordered(OrderEntity entity) {
     this.availableToOrder = false;
+    this.order = entity;
   }
 
   public void changeName(String newName) {

@@ -34,20 +34,21 @@ public class CreateNewOrderUseCase {
       ); // Берем столько инструментов по названию сколько укзано в заказе
       // (у каждого из инструментов будет разный серйник)
       instrumentsToOrder.addAll(instrumentsByNameAndQuantity);
+      log.info("Instruments {}", instrumentsByNameAndQuantity );
       // добавляем в итоговую коллекцию
     }
+
 
     // обогащаем заказ данными
     OrderEntity newOrder = OrderEntity.createNew(request.getAddress(), request.getCustomerName(), instrumentsToOrder);
 
-    // отправляем запрос во внешнюю систему для проверки наличии и готовности инструментов в к доставке получателю
-    storageExternalSystem.checkInstruments(getStorageRequest(newOrder));
-
+    log.info("new Order - {}", newOrder);
     //сохраняем заказ
-    newOrder = orderRepository.save(newOrder);
-
+    orderRepository.save(newOrder);
+    // отправляем запрос во внешнюю систему для проверки наличии и готовности инструментов в к доставке получателю
+    storageExternalSystem.checkInstruments(getStorageRequest(newOrder, instrumentsToOrder));
     // сохраняем состояние инструменов после сборки заказа
-    instrumentRepository.saveAll(newOrder.getInstruments());
+    instrumentRepository.saveAll(instrumentsToOrder);
     log.info("Oder with UUID {} successfully created", newOrder.getUuid());
   }
 
@@ -66,10 +67,10 @@ public class CreateNewOrderUseCase {
     }
   }
 
-  private CheckInstrumentsRequest getStorageRequest(OrderEntity order) {
+  private CheckInstrumentsRequest getStorageRequest(OrderEntity order, List<InstrumentEntity> instruments) {
     CheckInstrumentsRequest request = new CheckInstrumentsRequest();
 
-    List<InstrumentDto> instrumentsToCheck = order.getInstruments().stream().map(instrument -> {
+    List<InstrumentDto> instrumentsToCheck = instruments.stream().map(instrument -> {
       return new InstrumentDto(instrument.getSeriesNumber());
     }).toList();
 

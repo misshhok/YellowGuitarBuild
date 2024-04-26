@@ -59,10 +59,8 @@ public class OrderEntity {
       .reduce(0L, (x, y) -> {
         return x + y.getPriceCop();
       }, Long::sum);
-    // Указываем что все инструменты подготовлены для заказа и недоступны для последующих заказов
-    instruments.forEach(InstrumentEntity::ordered);
 
-    return new OrderEntity(
+    OrderEntity order = new OrderEntity(
       UUID.randomUUID().toString(),
       address,
       customerName,
@@ -71,6 +69,10 @@ public class OrderEntity {
       ZonedDateTime.now(),
       OrderState.NEW,
       ZonedDateTime.now());
+    // Указываем что все инструменты подготовлены для заказа и недоступны для последующих заказов
+    instruments.forEach(i -> i.ordered(order));
+
+    return order;
   }
 
   public void failed() {
@@ -83,7 +85,7 @@ public class OrderEntity {
   }
 
   public void startDelivering() {
-    if (this.state == OrderState.FAILED) {
+    if (this.state == OrderState.NEW) {
       this.state = OrderState.DELIVERING;
       this.lastUpdate = ZonedDateTime.now();
     } else {
